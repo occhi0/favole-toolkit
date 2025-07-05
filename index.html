@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+<script>
+  // Mock API completo per tutte le app
+  window.claude = {
+    complete: async (prompt) => {
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simula delay
+      
+      // Se il prompt contiene "JSON" o "character sheet", restituisce JSON
+      if (prompt.toLowerCase().includes('json') || prompt.toLowerCase().includes('character')) {
+        return JSON.stringify({
+          analisiPersonaggio: "Luca è un piccolo coniglio piccolo e coraggioso con orecchie lunghe e pelo bianco. Ha un carattere gentile e altruista.",
+          promptCharacterSheet: "A cute white rabbit character sheet, multiple poses (front view, side view, 3/4 view, happy expression), children's book illustration style, soft watercolor technique, green meadow background, magical golden flower, consistent character design for animation reference",
+          suggerimentiUso: "Usa questo character sheet come riferimento per mantenere coerenza visiva in tutte le illustrazioni della storia."
+        });
+      }
+      
+      // NUOVO: Se il prompt riguarda l'analisi della favola (primo step)
+      if (prompt.toLowerCase().includes('analizza questa favola') || prompt.toLowerCase().includes('estrai le informazioni')) {
+        return JSON.stringify({
+          personaggioPrincipale: "Luca è un piccolo coniglio bianco con orecchie lunghe e soffici, coraggioso e altruista",
+          ambientazione: "Un prato verde magico pieno di margherite, con un bosco incantato nelle vicinanze",
+          oggettiImportanti: "Fiore dorato magico, foglie curative del gufo",
+          coloriDominanti: "Verde prato, bianco neve, dorato magico, colori pastello",
+          momenteChiave: [
+            "Luca salta felice nel prato delle margherite",
+            "Incontra una farfalla con l'ala rotta",
+            "Visita il saggio gufo del bosco",
+            "Riceve il fiore magico dorato"
+          ]
+        });
+      }
+      
+      // AGGIORNATO: Gestione intelligente del numero di illustrazioni
+      if (prompt.toLowerCase().includes('crea') && (prompt.toLowerCase().includes('prompt') || prompt.toLowerCase().includes('illustrazioni'))) {
+        // Estrae il numero dal prompt
+        const numeroMatch = prompt.match(/Crea (\d+) prompt/);
+        const numeroIllustrazioni = numeroMatch ? parseInt(numeroMatch[1]) : 4;
+        
+        const tutteIllustrazioni = [
+          {
+            numero: 1,
+            momento: "Luca nel prato delle margherite",
+            promptCompleto: "A small white rabbit named Luca hopping joyfully in a green meadow full of daisies, children's book illustration style, soft watercolor technique, warm sunlight, magical atmosphere",
+            descrizioneItaliana: "Luca il coniglietto salta felice nel prato verde pieno di margherite"
+          },
+          {
+            numero: 2,
+            momento: "L'incontro con la farfalla",
+            promptCompleto: "A white rabbit meeting a colorful butterfly with a broken wing, compassionate scene, children's book illustration, soft watercolor style, emotional connection between characters",
+            descrizioneItaliana: "Luca incontra una farfalla colorata con l'ala rotta e decide di aiutarla"
+          },
+          {
+            numero: 3,
+            momento: "Dal gufo saggio del bosco",
+            promptCompleto: "A wise owl in the forest healing a butterfly's wing with magical leaves, white rabbit watching, mystical forest setting, children's book illustration, magical realism style",
+            descrizioneItaliana: "Il saggio gufo del bosco cura l'ala della farfalla con foglie magiche"
+          },
+          {
+            numero: 4,
+            momento: "Il fiore magico dorato",
+            promptCompleto: "A grateful butterfly giving a glowing golden flower to a white rabbit, magical moment, golden light emanating from flower, children's book finale illustration, heartwarming scene",
+            descrizioneItaliana: "La farfalla grata regala a Luca un fiore speciale che brilla di luce dorata"
+          },
+          {
+            numero: 5,
+            momento: "Luca che torna a casa felice",
+            promptCompleto: "A happy white rabbit returning home through the meadow, carrying a golden flower, sunset lighting, peaceful children's book ending illustration",
+            descrizioneItaliana: "Luca ritorna a casa felice con il suo fiore magico"
+          },
+          {
+            numero: 6,
+            momento: "Luca che condivide la sua storia",
+            promptCompleto: "A white rabbit sharing his adventure story with other forest animals, golden flower glowing, community gathering, heartwarming children's book illustration",
+            descrizioneItaliana: "Luca racconta la sua avventura agli altri animali del bosco"
+          }
+        ];
+        
+        return JSON.stringify({
+          illustrazioni: tutteIllustrazioni.slice(0, numeroIllustrazioni)
+        });
+      }
+      
+      // Altrimenti restituisce la storia normale
+      return "C'era una volta un piccolo coniglio di nome Luna che viveva in un prato magico. Luna aveva il pelo bianco come la neve e orecchie lunghe e soffici. Un giorno incontrò una farfalla colorata e insieme vissero una bellissima avventura. Luna imparò che l'amicizia è il tesoro più prezioso di tutti.";
+    }
+  };
+</script>
+  </body>
+</html>
