@@ -128,28 +128,8 @@ LINEE GUIDA:
 
 IMPORTANTE: Scrivi SOLO la storia, senza titolo o formattazione aggiuntiva. Segui fedelmente lo stile di ${selectedAuthor?.label} nelle scelte linguistiche, nel ritmo e nell'approccio narrativo.`;
 
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
-  },
-  body: JSON.stringify({
-    model: 'gpt-3.5-turbo',
-    messages: [
-      {
-        role: 'user',
-        content: prompt
-      }
-    ],
-    max_tokens: 600,
-    temperature: 0.8
-  })
-});
-
-const data = await response.json();
-const storyText = data.choices[0].message.content;
-      setStoryText(storyText);
+      const response = await window.claude.complete(prompt);
+      setStoryText(response);
       setCurrentStep(7);
     } catch (error) {
       console.error('Errore nella generazione della storia:', error);
