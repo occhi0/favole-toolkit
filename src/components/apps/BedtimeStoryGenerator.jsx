@@ -128,27 +128,27 @@ LINEE GUIDA:
 
 IMPORTANTE: Scrivi SOLO la storia, senza titolo o formattazione aggiuntiva. Segui fedelmente lo stile di ${selectedAuthor?.label} nelle scelte linguistiche, nel ritmo e nell'approccio narrativo.`;
 
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+          'Authorization': `Bearer ${import.meta.env.VITE_CLAUDE_API_KEY}`,
+          'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
+          model: 'claude-3-haiku-20240307',
+          max_tokens: 1000,
           messages: [
             {
               role: 'user',
               content: prompt
             }
-          ],
-          max_tokens: 600,
-          temperature: 0.8
+          ]
         })
       });
 
       const data = await response.json();
-      const storyText = data.choices[0].message.content;
+      const storyText = data.content[0].text;
       setStoryText(storyText);
       setCurrentStep(7);
     } catch (error) {
